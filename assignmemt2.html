@@ -1,0 +1,105 @@
+
+
+<html>
+	<head>
+		<title>assignment</title>
+		<style>
+			.enter {
+				width: 400px;
+				height: 50px;
+				margin-top: 40px;
+				margin-left: 550px;
+			}
+			.btn {
+				width: 100px;
+				height: 50px;
+				margin-top: 40px;
+				font-size: 20px;
+				background-color: gray;
+			}
+			.store
+			{
+				display:flex;
+				flex-wrap:wrap;
+				margin:50px 50px 50px 50px;
+				margin-left:200px;
+				
+			
+			}
+			.font{
+				margin-left:40px;
+				font-size:20px;
+				color:white;
+				
+			}
+			.border{
+				margin:40px 40px 40px 40px;
+				border:5px solid black;
+				width:400px;
+				height:550px;
+				margin-left:30px;
+				background-color:gray;
+				
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<input class="enter" type="text" placeholder="name" />
+			<button class="btn" onclick="search()">click me</button>
+		</div>
+
+		<div class="store"></div>
+		
+		<script>
+			async function fetchData(url) {
+				const response = await fetch(url);
+				const jsonData = await response.json();
+				return jsonData;
+			}
+			
+			async function search() {
+				let store = document.querySelector(".store");
+				store.innerHTML = ""; // Clear previous results
+				
+				let user = document.querySelector(".enter").value;
+				let response = await fetchData(`http://www.omdbapi.com/?apikey=6663c708&s=${user}`);
+				let data = response.Search;
+				
+				console.log(data);
+				
+				if (data) {
+					for (let i = 0; i < data.length; i++) {
+						let main = document.createElement("div");
+						
+						let div1 = document.createElement("div");
+						div1.setAttribute("class","font");
+						div1.innerText = data[i].Title;
+						
+						let div2 = document.createElement("div");
+						div2.setAttribute("class","font");
+						div2.innerText = data[i].Year;
+						
+						let div3 = document.createElement("div");
+						div3.setAttribute("class","font");
+						div3.innerText = data[i].imdbID;
+						
+						let div4 = document.createElement("img");
+						div4.setAttribute("class","font");
+						div4.setAttribute("src", data[i].Poster);
+						
+						main.append(div1, div2, div3, div4);
+						main.setAttribute("class","border color");
+					
+						store.append(main);
+					}
+				} else {
+					let error = document.createElement("div");
+					error.innerText = "No results found.";
+					store.append(error);
+				}
+			}
+		</script>
+	</body>
+</html>
+
